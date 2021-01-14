@@ -12,10 +12,10 @@ app = Flask(__name__)
 def index():
   return render_template('index.html')
   
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['GET','POST'])
 def predict():
     #if lr:
-        
+    value = 1100    
     int_features = [int(x) for x in request.form.values()]
     value = int_features[0]
             #json_ = request.json
