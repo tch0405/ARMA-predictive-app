@@ -4,7 +4,7 @@ import traceback
 import pandas as pd
 import numpy as np
 
-
+lr = joblib.load("model.pkl") # Load "model.pkl"
 
 # Your API definition
 app = Flask(__name__)
@@ -14,34 +14,32 @@ def index():
   
 @app.route('/predict', methods=['POST'])
 def predict():
-    if lr:
-        try:
-            value=1100
-            int_features = [int(x) for x in request.form.values()]
-            value = int_features[0]
+    #if lr:
+        
+    int_features = [int(x) for x in request.form.values()]
+    value = int_features[0]
             #json_ = request.json
             #print(json_)
             #value = int(json_['value'])
-
-            prediction = list(lr.predict(value,value))
+    prediction = list(lr.predict(value,value))
 
             #return jsonify({'Prediction for SR at Peak Demand (MW)': str(prediction)})
-            return render_template('index.html', prediction_text='Next SR at Peak Demand (MW) should be {}MW'.format(prediction[0]))
+    return render_template('index.html', prediction_text='Next SR at Peak Demand (MW) should be {}MW'.format(prediction[0]))
         
-        except:
-            return
+       
 
         
-    else:
-        print ('Train the model first')
-        return ('No model here to use')
+    #else:
+    #    print ('Train the model first')
+    #    return ('No model here to use')
 
 if __name__ == '__main__':
-    
     port = 8888
+    app.run(port=port)
+    
     lr = joblib.load("model.pkl") # Load "model.pkl"
     print ('Model loaded')
     model_columns = joblib.load("model.pkl") # Load "model.pkl"
     print ('Model columns loaded')
 
-    app.run(port=port, debug=True)
+    
